@@ -1,0 +1,32 @@
+stages:
+    - build_stage
+    - deploy_stage
+    - test_stage
+
+build:
+    stage: build_stage
+    script:
+        - docker --version
+        - docker build -t pyapp .
+    tags: 
+        - localshell
+        - localrunner
+
+deploy:
+    stage: deploy_stage
+    script:
+        - docker stop pyappcontainer || true && docker rm pyappcontainer || true
+        - docker run -d --name pyappcontainer -p 80:8080 pyapp
+    tags: 
+        - localshell
+        - localrunner
+
+# post deployment test
+test:
+    stage: test_stage
+    script:
+        - apk --no-cache add curl
+        - curl http://0.0.0.0:80 | grep "Happy birthday"
+    tags: 
+        - localshell
+        - localrunner

@@ -1,0 +1,28 @@
+stages:
+    - build_stage
+    - deploy_stage
+    - test_stage
+
+build:
+    stage: build_stage
+    script:
+        - docker --version
+        - docker build -t pyapp .
+    tags:
+        - Udemy_GitLab_CICD
+
+deploy:
+    stage: deploy_stage
+    script:
+        - docker stop pyappcontainer1 || true && docker rm pyappcontainer1 || true
+        - docker run -d --name pyappcontainer1 -p 5000:8080 pyapp
+    tags:
+        - Udemy_GitLab_CICD
+
+test:
+    stage: test_stage
+    script:
+        - apt-get -qq update || true && apt-get -qq -y install curl || true
+        - curl http://0.0.0.0:5000 | grep "Happy birthday"
+    tags:
+        - Udemy_GitLab_CICD
