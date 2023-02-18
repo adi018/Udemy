@@ -26,7 +26,14 @@ int main(){
 
     //Float problems : The precision is usually too limited
     //for a lot of applications
-    float number4 = 192400023.0f;               // Error : narrowing conversion
+
+    // ============================================================================================
+    // NOTE:----------------
+    // As we use, brace initialization, functional or assignment and more than 7 digits when we initialize the float 
+    //we are going to face problems
+    // ============================================================================================
+    float number4 = 192400023.0f;               // Error : narrowing conversion --> Number is chopped off
+    //double number4 = 192400023.0;               // gives correct result as the number is not chopped off
 
     std::cout << "number4 : " << number4 << std::endl;
 

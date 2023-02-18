@@ -11,9 +11,24 @@ int main(){
 	//Pointer arithmetic notation
     int * pointer1 {scores + 0};
     int * pointer2 {scores + 8};
+
+    std::cout << "pointer1 : " << pointer1 << std::endl;
+    std::cout << "pointer2 : " << pointer2 << std::endl;
+
+    std::cout << "*pointer1 : " << *pointer1 << std::endl;
+    std::cout << "*pointer2 : " << *pointer2 << std::endl;
+
+    std::cout << "============================" << std::endl;
+
     
     std::cout << "pointer2 - pointer1 : " << pointer2 - pointer1 << std::endl; // 8 
     std::cout << "pointer1 - pointer2 : " << pointer1 - pointer2 << std::endl; // -8
+
+    std::cout << "pointer2 - pointer1 : " << *pointer2 - *pointer1 << std::endl; // 8 
+    std::cout << "pointer1 - pointer2 : " << *pointer1 - *pointer2 << std::endl; // -8
+
+    std::cout << "============================" << std::endl;
+
 
 
     std::ptrdiff_t pos_diff = pointer2 - pointer1;
