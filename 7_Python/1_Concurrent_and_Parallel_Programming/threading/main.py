@@ -21,6 +21,7 @@
 #     main()
 
 import time
+import threading
 
 def calculate_sum_squares(n):
     sum_squares = 0
@@ -37,15 +38,42 @@ def sleep_a_little(seconds):
 
 def main():
     calc_start_time = time.time()
+
+    current_threads = []
     for i in range(5):
-        calculate_sum_squares((i+1)*1000000)
+        max_value = (i+1)*1000000
+        # STEP 1: Initialize the thread
+        t = threading.Thread(target=calculate_sum_squares, args=(max_value, ))
+        # STEP 2: Start the thread
+        t.start()
+        current_threads.append(t)
+    # end
+
+    # STEP 3: Wait until all threads joins back
+    for i in range(len(current_threads)):
+        current_threads[i].join()
     # end
 
     print("Calculating sum of squares took: ", round(time.time() - calc_start_time, 1))
 
     sleep_start_time = time.time()
+
+    current_threads = []
     for i in range(1, 6):
-        sleep_a_little(i)
+        t = threading.Thread(target=sleep_a_little, args=(i, ))
+        t.start()
+        # If we put t.join() here, then it turns into sequential program as the code would wait on the current iteration\
+        # t.start() to finish before going to the next iteration of the for loop. Then no use of code in line 75-77
+        #
+        # Something like
+        # t.start()
+        # t.join()
+
+        current_threads.append(t)
+    # end
+
+    for i in range(len(current_threads)):
+        current_threads[i].join()
     # end
     print("Sleeping took: ", round(time.time() - sleep_start_time, 1))
 
