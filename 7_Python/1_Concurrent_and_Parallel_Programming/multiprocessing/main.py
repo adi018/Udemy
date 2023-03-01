@@ -1,22 +1,28 @@
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 import time
 
-def check_value_in_list(k, i, number_of_processes):
+def check_value_in_list(k, i, number_of_processes, queue):
     max_num_to_check_to = 10**6
     lower = int(i * max_num_to_check_to/number_of_processes)
     upper = int((i + 1) * max_num_to_check_to/number_of_processes)
+    number_of_hits = 0
+
     for i in range(lower, upper):
-        i in k
+        if i in k:
+            number_of_hits += 1
+        # end if
     # end
+    queue.put((lower, upper, number_of_hits))
 # end def
 
 num_processes = 4
 comp_list = [1,2,3]
+queue = Queue()
 
 start_time = time.time()
 processes = []
 for i in range(num_processes):
-    t = Process(target=check_value_in_list, args=(comp_list, i, num_processes))
+    t = Process(target=check_value_in_list, args=(comp_list, i, num_processes, queue))
     processes.append(t)
 # end
 
@@ -27,6 +33,19 @@ for t in processes:
 for t in processes:
     t.join()
 # end
+
+queue.put("DONE")
+
+while True:
+    v = queue.get()
+
+    if v == "DONE":
+        break
+    # end if
+
+    lower, upper, number_of_hits = v
+
+    print(f"Between {lower} and {upper}, we have {number_of_hits} in the list")
 
 print("Time taken: ", time.time() - start_time)
 
