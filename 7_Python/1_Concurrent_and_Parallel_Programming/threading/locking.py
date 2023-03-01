@@ -11,11 +11,28 @@ lock = threading.Lock()
 
 def increment():
     global counter
-    for i in range(10**6):
+    for i in range(10**10):
+        # With "with lock:" (acts as a Context Managers) all the code inside the indent start with lock.acquire()
+        # and when the execution moves out of "with lock:" then automatically lock.release() gets called
+
+
+        # The virtual execution is shown with ## symbol
         with lock:
+            ## lock.acquire() --> called automatically
             counter += 1
-            # more locking
-            # more locking
+            # more code
+            # more code
+        # end with
+        ## lock.release() --> --> called automatically
+    # end for
+    """
+    Alternative Method
+    for i in range(10**10):
+        lock.acquire()
+        counter += 1
+        lock.release()
+    # end
+    """
 
 threads = []
 for i in range(4):
