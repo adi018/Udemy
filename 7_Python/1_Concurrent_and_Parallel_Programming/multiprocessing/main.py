@@ -1,8 +1,11 @@
 from multiprocessing import Process
 import time
 
-def check_value_in_list(k):
-    for i in range(10**6):
+def check_value_in_list(k, i, number_of_processes):
+    max_num_to_check_to = 10**6
+    lower = int(i * max_num_to_check_to/number_of_processes)
+    upper = int((i + 1) * max_num_to_check_to/number_of_processes)
+    for i in range(lower, upper):
         i in k
     # end
 # end def
@@ -13,7 +16,7 @@ comp_list = [1,2,3]
 start_time = time.time()
 processes = []
 for i in range(num_processes):
-    t = Process(target=check_value_in_list, args=(comp_list, ))
+    t = Process(target=check_value_in_list, args=(comp_list, i, num_processes))
     processes.append(t)
 # end
 
