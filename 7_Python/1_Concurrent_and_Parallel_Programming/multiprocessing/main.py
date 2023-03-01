@@ -1,4 +1,4 @@
-from threading import Thread
+from multiprocessing import Process
 import time
 
 def check_value_in_list(k):
@@ -7,21 +7,21 @@ def check_value_in_list(k):
     # end
 # end def
 
-num_threads = 4
+num_processes = 4
 comp_list = [1,2,3]
 
 start_time = time.time()
-threads = []
-for i in range(num_threads):
-    t = Thread(target=check_value_in_list, args=(comp_list, ))
-    threads.append(t)
+processes = []
+for i in range(num_processes):
+    t = Process(target=check_value_in_list, args=(comp_list, ))
+    processes.append(t)
 # end
 
-for t in threads:
+for t in processes:
     t.start()
 # end
 
-for t in threads:
+for t in processes:
     t.join()
 # end
 
