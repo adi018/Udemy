@@ -1,51 +1,30 @@
-from multiprocessing import Process, Queue
+from multiprocessing import Pool, cpu_count
 import time
 
-def check_value_in_list(k, i, number_of_processes, queue):
-    max_num_to_check_to = 10**6
-    lower = int(i * max_num_to_check_to/number_of_processes)
-    upper = int((i + 1) * max_num_to_check_to/number_of_processes)
-    number_of_hits = 0
+def square(x):
+    return x**2
 
-    for i in range(lower, upper):
-        if i in k:
-            number_of_hits += 1
-        # end if
-    # end
-    queue.put((lower, upper, number_of_hits))
-# end def
 
 num_processes = 4
 comp_list = [1,2,3]
-queue = Queue()
+
 
 start_time = time.time()
-processes = []
-for i in range(num_processes):
-    t = Process(target=check_value_in_list, args=(comp_list, i, num_processes, queue))
-    processes.append(t)
-# end
 
-for t in processes:
-    t.start()
-# end
+num_cpu_to_use = max(1, cpu_count() - 1)
+print("Num of CPUs used: ", num_cpu_to_use)
 
-for t in processes:
-    t.join()
-# end
+# Pool(2) --> Pool of size 2 i.e. we can use 2 processes
+with Pool(num_cpu_to_use) as mp_pool:
+    result = mp_pool.map(square, comp_list)
+# end with
 
-queue.put("DONE")
+print("Result: ", result)
 
-while True:
-    v = queue.get()
 
-    if v == "DONE":
-        break
-    # end if
 
-    lower, upper, number_of_hits = v
 
-    print(f"Between {lower} and {upper}, we have {number_of_hits} in the list")
+
 
 print("Time taken: ", time.time() - start_time)
 
