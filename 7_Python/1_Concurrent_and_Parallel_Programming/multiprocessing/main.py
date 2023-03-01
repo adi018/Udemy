@@ -1,3 +1,33 @@
+from threading import Thread
+import time
+
+def check_value_in_list(k):
+    for i in range(10**6):
+        i in k
+    # end
+# end def
+
+num_threads = 4
+comp_list = [1,2,3]
+
+start_time = time.time()
+threads = []
+for i in range(num_threads):
+    t = Thread(target=check_value_in_list, args=(comp_list, ))
+    threads.append(t)
+# end
+
+for t in threads:
+    t.start()
+# end
+
+for t in threads:
+    t.join()
+# end
+
+print("Time taken: ", time.time() - start_time)
+
+"""
 from multiprocessing import Pool, cpu_count
 
 
@@ -27,3 +57,4 @@ with Pool(num_cpu_to_use) as mp_pool:
     result = mp_pool.starmap(check_number_of_values_in_range, prepared_list)  # [(comp_list, lower, upper), ..]
 
 print(result)
+"""
