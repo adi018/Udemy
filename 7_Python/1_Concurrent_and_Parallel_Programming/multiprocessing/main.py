@@ -2,14 +2,14 @@ from multiprocessing import Pool, cpu_count
 import time
 from functools import partial
 
-def square(y, adding, x):
-    return x**y + adding
+def square(x, y):
+    return x**y
 
 
-num_processes = 4
-comp_list = [1,2,3]
-power = 3
-addition = 2
+num_processes   = 4
+comp_list       = [1, 2, 3]
+power_list      = [4, 5, 6]
+addition        = 2
 
 
 start_time = time.time()
@@ -17,10 +17,17 @@ start_time = time.time()
 num_cpu_to_use = max(1, cpu_count() - 1)
 print("Num of CPUs used: ", num_cpu_to_use)
 
-partial_function = partial(square, power, addition)
+prepared_list = []
+for i in range(len(comp_list)):
+    prepared_list.append((comp_list[i], power_list[i]))
+# end
+print("List used as input: ", prepared_list)
+
 # Pool(2) --> Pool of size 2 i.e. we can use 2 processes
 with Pool(num_cpu_to_use) as mp_pool:
-    result = mp_pool.map(partial_function, comp_list)
+    result = mp_pool.starmap(square, prepared_list)
+    # prepared list should be of form: [(1, 4), (2, 5), (3, 6)]
+    # starmap would do: square(1, 4), square(2, 5), square(3, 6)
 # end with
 
 print("Result: ", result)
