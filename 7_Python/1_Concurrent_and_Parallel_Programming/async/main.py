@@ -1,4 +1,41 @@
 import asyncio
+
+async def async_sleep():
+    print("Before Sleep ....")
+    await asyncio.sleep(5)
+    print("After Sleep ....")
+
+async def print_hello():
+    print("Hello!!")
+
+
+async def main():
+    # await keyword: Awaits the response of the corresponding async_sleep co-routine
+
+    """
+    So what happens with the await call is the wait call is not blocking. It allows execution of other code routines.
+    However, it does stop the execution of going further down in this function i.e. print_hello() will not be executed
+    until async_sleep() finishes.
+
+    But because we only have one main coroutine routine running, and inside of these, we call two more code routines.
+    These are all still being executed sequentially.
+
+    --> Basically we are running sequentially
+    """
+    await async_sleep()
+    await print_hello()
+
+if __name__=="__main__":
+    asyncio.run(main())
+
+
+
+
+
+
+
+"""
+import asyncio
 import time
 import requests
 import aiohttp
@@ -40,3 +77,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+"""
