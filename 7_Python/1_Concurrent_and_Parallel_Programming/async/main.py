@@ -4,7 +4,7 @@ import time
 
 async def async_sleep(n):
     print("Before Sleep .... ", n)
-    await asyncio.sleep(5)
+    await asyncio.sleep(n)
     print("After Sleep .... ", n)
 
 
@@ -14,11 +14,7 @@ async def print_hello():
 
 async def main():
     start_time = time.time()
-    task = asyncio.create_task(async_sleep(1))
-    await async_sleep(2)    # first co-routine
-    await print_hello()
-    await task              # second co-routine
-
+    await asyncio.gather(print_hello(), async_sleep(5), async_sleep(2), print_hello())
     print("Total time: ", time.time() -start_time)
 
 
