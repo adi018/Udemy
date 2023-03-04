@@ -14,8 +14,12 @@ async def print_hello():
 
 async def main():
     start_time = time.time()
-    await asyncio.gather(print_hello(), async_sleep(5), async_sleep(2), print_hello())
-    print("Total time: ", time.time() -start_time)
+    try:
+        await asyncio.gather(asyncio.wait_for(async_sleep(30), 5), async_sleep(7), print_hello())
+    except asyncio.TimeoutError:
+        print("Encountered timeout error!!")
+    # end
+    print("Total time: ", time.time() - start_time)
 
 
 if __name__=="__main__":
